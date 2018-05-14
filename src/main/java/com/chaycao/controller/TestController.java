@@ -25,4 +25,8 @@ public class TestController {
     public void parTest(@RequestParam int a, @RequestParam String b) {
         System.out.println("OK:par " + a + b);
     }
+    @RequestMapping("/view")
+    public String view() {
+        return "index";
+    }
 }
