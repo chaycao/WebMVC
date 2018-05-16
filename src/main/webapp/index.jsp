@@ -12,7 +12,7 @@
 </head>
 <body>
 <%
-    out.println("WEB-INF/Hello World！");
+    out.println("Hello World！");
 %>
 </body>
 </html>

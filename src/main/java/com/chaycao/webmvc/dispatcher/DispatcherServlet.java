@@ -70,11 +70,11 @@ public class DispatcherServlet extends HttpServlet {
         RouteManager.scanAndLoadRouteByController();
 
         //注册JSP的Servlet
-        ServletRegistration jspServlet = Context.SERVLETCONTEXT.getServletRegistration("jsp");
-        jspServlet.addMapping("/WEB-INF/*");
-//        //注册处理静态资源的Servlet
-//        ServletRegistration defaultServlet = sc.getServletRegistration("default");
-//        defaultServlet.addMapping(ConfigHelper.getAppAssetPath() + "*");
+        try {
+            JspRegister.registeJsp();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

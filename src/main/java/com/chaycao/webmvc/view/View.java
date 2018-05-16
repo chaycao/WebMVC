@@ -35,16 +35,7 @@ public class View {
     public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) throws Exception {
         if (path == null)
             return;
-        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
         return;
-//
-////        request.getRequestDispatcher("/index.jsp").include(request, response);
-//        String jspOutput = JspToHtmlUtil.getJspOutput("/"+path, request, response);
-//        System.out.println(jspOutput);
-////        InputStream in = new BufferedInputStream(new FileInputStream(path));
-//        OutputStream out = response.getOutputStream();
-//        byte[] data = jspOutput.getBytes();
-//        int len = 0;
-//        out.write(data, 0, data.length);
     }
 }

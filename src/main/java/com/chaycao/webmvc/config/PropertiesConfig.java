@@ -26,7 +26,18 @@ public class PropertiesConfig {
     public static PropertiesConfig getInstance() {
         return PropertiesConfigHolder.instance;
     }
-    public static String getProperty(String name) {
-        return getInstance().prop.getProperty(name);
+
+    /**
+     * 获得配置文件中的配置
+     * @param name
+     * @return 配置值，若为name为null或空字符串，返回null
+     */
+    public static String getProperty(String name, String defaultValue) {
+        if (name == null || name.equals(""))
+            return null;
+        //TODO 根据不同属性，不同默认值设置
+        String property = getInstance().prop.getProperty(name);
+
+        return property;
     }
 }
