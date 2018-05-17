@@ -1,7 +1,6 @@
 package com.chaycao.webmvc.dispatcher;
 
 import com.chaycao.webmvc.config.Context;
-import com.chaycao.webmvc.config.ControllerConfig;
 import com.chaycao.webmvc.handler.HttpHandler;
 import com.chaycao.webmvc.route.Route;
 import com.chaycao.webmvc.route.RouteManager;
@@ -11,7 +10,6 @@ import com.chaycao.webmvc.view.ViewResolver;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,34 +45,30 @@ public class DispatcherServlet extends HttpServlet {
         doDispatch(request, response);
     }
 
-    //TODO ViewResolver解析ModelAndView
-    //TODO 使用Model对View渲染
     protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.info("DispatcherServlet doDispatch: " + request.getRequestURL());
         Route route = RouteManager.findRouteByRequest(request);
-        ModelAndView mv = HttpHandler.newInstance().handler(request, response, route);
-        View view = ViewResolver.newInstance().resovleModelAndView(mv);
-        view.render(mv.getModel(), request, response, Context.SERVLETCONTEXT);
+        if (route == null) { // 未找到路由
+            logger.info("Can not find Rout : " + request.getRequestURL());
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            ModelAndView mv = HttpHandler.newInstance().handler(request, response, route);
+            View view = ViewResolver.newInstance().resovleModelAndView(mv);
+            view.render(mv.getModel(), request, response, Context.SERVLET_CONTEXT);
+        }
     }
 
     @Override
     public void init() throws ServletException {
+        logger.info("DispatcherServlet start init.");
         Context.REAL_CONTEXT_PATH = this.getServletContext().getRealPath("");
-        Context.SERVLETCONTEXT = this.getServletContext();
-        // 扫描加载Controller
-        try {
-            ControllerConfig.scanAndLoadController();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        // 扫描加载Rounte
+        Context.SERVLET_CONTEXT = this.getServletContext();
+        logger.info("DispatcherServlet scan and load Controller.");
+        ControllerManager.scanAndLoadController();
+        logger.info("DispatcherServlet scan and load Route.");
         RouteManager.scanAndLoadRouteByController();
-
-        //注册JSP的Servlet
-        try {
-            JspRegister.registeJsp();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        logger.info("DispatcherServlet registe jsp servlet.");
+        JspRegister.registeJspServlet();
     }
 
 }

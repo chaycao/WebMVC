@@ -31,6 +31,7 @@ public class HttpHandler implements Handler {
     }
 
     public ModelAndView handler(HttpServletRequest request, HttpServletResponse response, Route route) throws Exception {
+
         Object[] args = argumentResolver.resolveArgument(request, response, route);
         Object result = invoke(route, args);
         ModelAndView mv = returnValueResolver.resolveReturnValue(result);

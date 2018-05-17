@@ -33,9 +33,9 @@ public class View {
     }
 
     public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) throws Exception {
-        if (path == null)
-            return;
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
-        return;
+        if (path != null) {
+            model.forEach((k, v) -> request.setAttribute(k, v));
+            request.getRequestDispatcher(path).forward(request, response);
+        }
     }
 }

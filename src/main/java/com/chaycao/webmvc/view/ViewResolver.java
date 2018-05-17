@@ -26,7 +26,7 @@ public class ViewResolver {
     private View resolveViewName(String viewName) {
         if (null == viewName)
             return new View();
-        String path = PropertiesConfig.getProperty("viewPrefix") + viewName + PropertiesConfig.getProperty("viewSuffix");
+        String path = PropertiesConfig.getProperty("viewPrefix", "/") + viewName + PropertiesConfig.getProperty("viewSuffix", "");
         return new View(path);
     }
 

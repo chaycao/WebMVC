@@ -1,7 +1,7 @@
 package com.chaycao.webmvc.route;
 
 import com.chaycao.webmvc.annotation.RequestMapping;
-import com.chaycao.webmvc.config.ControllerConfig;
+import com.chaycao.webmvc.dispatcher.ControllerManager;
 import com.chaycao.webmvc.util.PathUtil;
 import org.apache.log4j.Logger;
 
@@ -41,7 +41,7 @@ public class RouteManager {
 
     public static List<Route> scanRouteByController() {
         List<Route> routes = new ArrayList<>();
-        for (Class<?> controller : ControllerConfig.getControllers()) {
+        for (Class<?> controller : ControllerManager.getControllers()) {
             String basePath = getRequestMappingValue(controller);
             for (Method m : controller.getDeclaredMethods()) {
                 String routPath = getRequestMappingValue(m);

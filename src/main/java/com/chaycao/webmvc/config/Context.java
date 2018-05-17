@@ -11,5 +11,5 @@ import javax.servlet.ServletContext;
  */
 public class Context {
     public static String REAL_CONTEXT_PATH;
-    public static ServletContext SERVLETCONTEXT;
+    public static ServletContext SERVLET_CONTEXT;
 }

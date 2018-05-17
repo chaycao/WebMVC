@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 可实现jsp内容的加载，实现include效果，该类暂时不使用
  * @author chaycao
  * @description
  * @date 2018-05-14 17:18.

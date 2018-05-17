@@ -3,6 +3,7 @@ package com.chaycao.controller;
 import com.chaycao.webmvc.annotation.Controller;
 import com.chaycao.webmvc.annotation.RequestMapping;
 import com.chaycao.webmvc.annotation.RequestParam;
+import com.chaycao.webmvc.view.ModelAndView;
 
 /**
  * Title:
@@ -27,6 +28,12 @@ public class TestController {
     }
     @RequestMapping("/view")
     public String view() {
-        return "index";
+        return "WEB-INF/index";
+    }
+    @RequestMapping("/model")
+    public ModelAndView model(ModelAndView modelAndView) {
+        modelAndView.addObject("name", "chaycao");
+        modelAndView.setView("model");
+        return modelAndView;
     }
 }

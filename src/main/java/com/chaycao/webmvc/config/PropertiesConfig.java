@@ -35,9 +35,6 @@ public class PropertiesConfig {
     public static String getProperty(String name, String defaultValue) {
         if (name == null || name.equals(""))
             return null;
-        //TODO 根据不同属性，不同默认值设置
-        String property = getInstance().prop.getProperty(name);
-
-        return property;
+        return getInstance().prop.getProperty(name);
     }
 }

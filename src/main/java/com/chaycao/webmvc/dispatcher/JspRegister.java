@@ -14,10 +14,14 @@ import java.util.List;
  * @date 2018-05-16 20:41.
  */
 public class JspRegister {
-    public static void registeJsp() throws IOException {
+    public static void registeJspServlet() {
         List<String> paths = new ArrayList<>();
-        paths = FileUtil.scanAllJsp(Context.REAL_CONTEXT_PATH);
-        ServletRegistration jspServlet = Context.SERVLETCONTEXT.getServletRegistration("jsp");
+        try {
+            paths = FileUtil.scanAllJsp(Context.REAL_CONTEXT_PATH);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ServletRegistration jspServlet = Context.SERVLET_CONTEXT.getServletRegistration("jsp");
         for (String path : paths)
             jspServlet.addMapping(path);
     }

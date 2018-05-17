@@ -39,7 +39,7 @@ public class FileUtil {
                 } else {
                     String path = file.getCanonicalPath();
                     if (path.endsWith(".jsp")) {
-                        String relativePath = "/" + path.substring(root.length());
+                        String relativePath = "/" + path.substring(root.length()).replace("\\","/");
                         jspPathList.add(relativePath);
                     }
                 }

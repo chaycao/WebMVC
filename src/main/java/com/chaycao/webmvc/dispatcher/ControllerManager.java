@@ -1,6 +1,7 @@
-package com.chaycao.webmvc.config;
+package com.chaycao.webmvc.dispatcher;
 
 import com.chaycao.webmvc.annotation.Controller;
+import com.chaycao.webmvc.config.PropertiesConfig;
 import com.chaycao.webmvc.expection.WebMvcException;
 import com.chaycao.webmvc.util.PackageUtil;
 
@@ -12,16 +13,16 @@ import java.util.List;
  * @description: Controller组件的配置
  * @date 2018-04-25 16:08.
  */
-public class ControllerConfig {
+public class ControllerManager {
     private List<Class<?>> controllers = new ArrayList<>();
 
-    private ControllerConfig() {}
+    private ControllerManager() {}
 
     private static class controllerConfigHolder {
-        private static ControllerConfig instance = new ControllerConfig();
+        private static ControllerManager instance = new ControllerManager();
     }
 
-    private static ControllerConfig getInstance() {
+    private static ControllerManager getInstance() {
         return controllerConfigHolder.instance;
     }
 
@@ -29,10 +30,15 @@ public class ControllerConfig {
      * 加载Controller
      * 查找指定扫描包下的所有类，筛选具有Controller注解的类
      */
-    public static void scanAndLoadController() throws ClassNotFoundException {
-        String value = PropertiesConfig.getProperty("CompantScanBasePackages");
+    public static void scanAndLoadController() {
+        String value = PropertiesConfig.getProperty("CompantScanBasePackages", "");
         String[] basePackages = value.split(",");
-        List<Class<?>> controllers = scanController(basePackages);
+        List<Class<?>> controllers = null;
+        try {
+            controllers = scanController(basePackages);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         addControllers(controllers);
     }
 
