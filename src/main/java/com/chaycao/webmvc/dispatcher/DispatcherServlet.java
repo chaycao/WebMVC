@@ -1,13 +1,18 @@
 package com.chaycao.webmvc.dispatcher;
 
+import com.chaycao.webmvc.config.AppConfig;
 import com.chaycao.webmvc.config.Context;
 import com.chaycao.webmvc.handler.HttpHandler;
+import com.chaycao.webmvc.route.ControllerManager;
 import com.chaycao.webmvc.route.Route;
 import com.chaycao.webmvc.route.RouteManager;
 import com.chaycao.webmvc.view.ModelAndView;
 import com.chaycao.webmvc.view.View;
 import com.chaycao.webmvc.view.ViewResolver;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,6 +27,8 @@ import java.io.IOException;
  */
 public class DispatcherServlet extends HttpServlet {
     static Logger logger = Logger.getLogger(DispatcherServlet.class.getName());
+
+    private RouteManager routeManager;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,7 +54,7 @@ public class DispatcherServlet extends HttpServlet {
 
     protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.info("DispatcherServlet doDispatch: " + request.getRequestURL());
-        Route route = RouteManager.findRouteByRequest(request);
+        Route route = routeManager.findRouteByRequest(request);
         if (route == null) { // 未找到路由
             logger.info("Can not find Rout : " + request.getRequestURL());
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -63,11 +70,10 @@ public class DispatcherServlet extends HttpServlet {
         logger.info("DispatcherServlet start init.");
         Context.REAL_CONTEXT_PATH = this.getServletContext().getRealPath("");
         Context.SERVLET_CONTEXT = this.getServletContext();
-        logger.info("DispatcherServlet scan and load Controller.");
-        ControllerManager.scanAndLoadController();
-        logger.info("DispatcherServlet scan and load Route.");
-        RouteManager.scanAndLoadRouteByController();
-        logger.info("DispatcherServlet registe jsp servlet.");
+
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        this.routeManager = (RouteManager) context.getBean("routeManager");
+
         JspRegister.registeJspServlet();
     }
 

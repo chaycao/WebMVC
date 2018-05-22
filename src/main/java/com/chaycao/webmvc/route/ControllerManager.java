@@ -1,9 +1,10 @@
-package com.chaycao.webmvc.dispatcher;
+package com.chaycao.webmvc.route;
 
 import com.chaycao.webmvc.annotation.Controller;
 import com.chaycao.webmvc.config.PropertiesConfig;
 import com.chaycao.webmvc.expection.WebMvcException;
 import com.chaycao.webmvc.util.PackageUtil;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,24 +14,21 @@ import java.util.List;
  * @description: Controller组件的配置
  * @date 2018-04-25 16:08.
  */
+@Component
 public class ControllerManager {
-    private List<Class<?>> controllers = new ArrayList<>();
 
-    private ControllerManager() {}
+    private List<Class<?>> controllers;
 
-    private static class controllerConfigHolder {
-        private static ControllerManager instance = new ControllerManager();
-    }
-
-    private static ControllerManager getInstance() {
-        return controllerConfigHolder.instance;
+    public ControllerManager() {
+        controllers = new ArrayList<>();
+        scanAndLoadController();
     }
 
     /**
      * 加载Controller
      * 查找指定扫描包下的所有类，筛选具有Controller注解的类
      */
-    public static void scanAndLoadController() {
+    public void scanAndLoadController() {
         String value = PropertiesConfig.getProperty("CompantScanBasePackages", "");
         String[] basePackages = value.split(",");
         List<Class<?>> controllers = null;
@@ -42,7 +40,7 @@ public class ControllerManager {
         addControllers(controllers);
     }
 
-    public static List<Class<?>> scanController(String[] basePackages) throws ClassNotFoundException {
+    public List<Class<?>> scanController(String[] basePackages) throws ClassNotFoundException {
         List<String> classNames = new ArrayList<>();
         for (String packageName : basePackages) {
             classNames.addAll(PackageUtil.getClassName(packageName));
@@ -57,23 +55,23 @@ public class ControllerManager {
         return controllers;
     }
 
-    public static boolean hasController(Class<?> c) {
+    public boolean hasController(Class<?> c) {
         if (c.getAnnotation(Controller.class) == null)
             return false;
         return true;
     }
 
-    public static List<Class<?>> getControllers() {
-        return getInstance().controllers;
+    public List<Class<?>> getControllers() {
+        return this.controllers;
     }
 
-    public static void addController(Class<?> controller) {
+    public void addController(Class<?> controller) {
         if (controller == null)
             throw new WebMvcException("add null Controller");
-        getInstance().controllers.add(controller);
+        this.controllers.add(controller);
     }
 
-    public static void addControllers(List<Class<?>> controllers) {
-        getInstance().controllers.addAll(controllers);
+    public void addControllers(List<Class<?>> controllers) {
+        this.controllers.addAll(controllers);
     }
 }
