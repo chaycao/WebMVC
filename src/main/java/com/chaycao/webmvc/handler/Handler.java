@@ -13,5 +13,5 @@ import java.lang.reflect.InvocationTargetException;
  * @date 2018-04-27 10:43.
  */
 public interface Handler {
-    public ModelAndView handler(HttpServletRequest request, HttpServletResponse response, Route route) throws Exception;
+    public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Route route) throws Exception;
 }

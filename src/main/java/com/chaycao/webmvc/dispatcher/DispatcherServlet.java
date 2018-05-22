@@ -2,18 +2,17 @@ package com.chaycao.webmvc.dispatcher;
 
 import com.chaycao.webmvc.config.AppConfig;
 import com.chaycao.webmvc.config.Context;
-import com.chaycao.webmvc.handler.HttpHandler;
-import com.chaycao.webmvc.route.ControllerManager;
+import com.chaycao.webmvc.handler.Handler;
 import com.chaycao.webmvc.route.Route;
 import com.chaycao.webmvc.route.RouteManager;
 import com.chaycao.webmvc.view.ModelAndView;
 import com.chaycao.webmvc.view.View;
 import com.chaycao.webmvc.view.ViewResolver;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +27,11 @@ import java.io.IOException;
 public class DispatcherServlet extends HttpServlet {
     static Logger logger = Logger.getLogger(DispatcherServlet.class.getName());
 
+    private ApplicationContext applicationContext;
+
     private RouteManager routeManager;
+
+    private Handler handler;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,22 +62,23 @@ public class DispatcherServlet extends HttpServlet {
             logger.info("Can not find Rout : " + request.getRequestURL());
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
-            ModelAndView mv = HttpHandler.newInstance().handler(request, response, route);
+            ModelAndView mv = handler.handle(request, response, route);
             View view = ViewResolver.newInstance().resovleModelAndView(mv);
-            view.render(mv.getModel(), request, response, Context.SERVLET_CONTEXT);
+            view.render(mv.getModel(), request, response, this.getServletContext());
         }
     }
 
     @Override
     public void init() throws ServletException {
         logger.info("DispatcherServlet start init.");
-        Context.REAL_CONTEXT_PATH = this.getServletContext().getRealPath("");
-        Context.SERVLET_CONTEXT = this.getServletContext();
 
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        this.routeManager = (RouteManager) context.getBean("routeManager");
+        applicationContext = Context.APPLICATION_CONTEXT;
+        routeManager = (RouteManager) applicationContext.getBean("routeManager");
+        handler = (Handler) applicationContext.getBean("httpHandler");
 
-        JspRegister.registeJspServlet();
+        routeManager.scanAndLoadRouteByController();
+
+        JspRegister.registeJspServlet(this.getServletContext());
     }
 
 }

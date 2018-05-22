@@ -21,13 +21,11 @@ public class RouteManager {
 
     private List<Route> routes;
 
+    @Autowired
     private ControllerManager controllerManager;
 
-    @Autowired
-    public RouteManager(ControllerManager controllerManager) {
+    public RouteManager() {
         routes = new ArrayList<>();
-        this.controllerManager = controllerManager;
-        scanAndLoadRouteByController();
     }
 
     /**
