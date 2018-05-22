@@ -1,18 +1,13 @@
 package com.chaycao.webmvc.dispatcher;
 
-import com.chaycao.webmvc.config.AppConfig;
 import com.chaycao.webmvc.config.Context;
 import com.chaycao.webmvc.handler.Handler;
 import com.chaycao.webmvc.route.Route;
 import com.chaycao.webmvc.route.RouteManager;
-import com.chaycao.webmvc.view.ModelAndView;
-import com.chaycao.webmvc.view.View;
-import com.chaycao.webmvc.view.ViewResolver;
+import com.chaycao.webmvc.view.*;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +27,8 @@ public class DispatcherServlet extends HttpServlet {
     private RouteManager routeManager;
 
     private Handler handler;
+
+    private ViewResolver viewResolver;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -63,8 +60,8 @@ public class DispatcherServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
             ModelAndView mv = handler.handle(request, response, route);
-            View view = ViewResolver.newInstance().resovleModelAndView(mv);
-            view.render(mv.getModel(), request, response, this.getServletContext());
+            View view = viewResolver.resovleModelAndView(mv);
+            view.render(mv.getModel(), request, response);
         }
     }
 
@@ -75,6 +72,7 @@ public class DispatcherServlet extends HttpServlet {
         applicationContext = Context.APPLICATION_CONTEXT;
         routeManager = (RouteManager) applicationContext.getBean("routeManager");
         handler = (Handler) applicationContext.getBean("httpHandler");
+        viewResolver = (ViewResolver) applicationContext.getBean("jspViewResolver");
 
         routeManager.scanAndLoadRouteByController();
 
