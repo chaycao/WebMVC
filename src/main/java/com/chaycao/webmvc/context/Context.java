@@ -1,9 +1,7 @@
-package com.chaycao.webmvc.config;
+package com.chaycao.webmvc.context;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import javax.servlet.ServletContext;
 
 /**
  * Title:

@@ -1,6 +1,5 @@
 package com.chaycao.webmvc.dispatcher;
 
-import com.chaycao.webmvc.config.Context;
 import com.chaycao.webmvc.util.FileUtil;
 
 import javax.servlet.ServletContext;

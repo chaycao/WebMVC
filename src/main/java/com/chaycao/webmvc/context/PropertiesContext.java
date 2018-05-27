@@ -1,4 +1,4 @@
-package com.chaycao.webmvc.config;
+package com.chaycao.webmvc.context;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -10,20 +10,20 @@ import java.util.Properties;
  * @description:
  * @date 2018-04-23 20:35.
  */
-public class PropertiesConfig {
+public class PropertiesContext {
     private Properties prop;
-    private PropertiesConfig() {
+    private PropertiesContext() {
         prop = new Properties();
         try {
-            prop.load(PropertiesConfig.class.getClassLoader().getResourceAsStream("webmvc.properties"));
+            prop.load(PropertiesContext.class.getClassLoader().getResourceAsStream("webmvc.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     private static class PropertiesConfigHolder {
-        private static PropertiesConfig instance = new PropertiesConfig();
+        private static PropertiesContext instance = new PropertiesContext();
     }
-    public static PropertiesConfig getInstance() {
+    public static PropertiesContext getInstance() {
         return PropertiesConfigHolder.instance;
     }
 

@@ -46,7 +46,7 @@
       <resource>
         <directory>src/main/resource</directory>
         <includes>
-          <include>*.properties</include>
+          <include>*.*</include>
         </includes>
       </resource>
     </resources>

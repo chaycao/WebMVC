@@ -1,6 +1,6 @@
 package com.chaycao.webmvc.dispatcher;
 
-import com.chaycao.webmvc.config.Context;
+import com.chaycao.webmvc.context.Context;
 import com.chaycao.webmvc.handler.Handler;
 import com.chaycao.webmvc.route.Route;
 import com.chaycao.webmvc.route.RouteManager;

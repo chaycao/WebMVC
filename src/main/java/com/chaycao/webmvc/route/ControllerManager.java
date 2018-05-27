@@ -1,7 +1,7 @@
 package com.chaycao.webmvc.route;
 
 import com.chaycao.webmvc.annotation.Controller;
-import com.chaycao.webmvc.config.PropertiesConfig;
+import com.chaycao.webmvc.context.PropertiesContext;
 import com.chaycao.webmvc.expection.WebMvcException;
 import com.chaycao.webmvc.util.PackageUtil;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class ControllerManager {
      * 查找指定扫描包下的所有类，筛选具有Controller注解的类
      */
     public void scanAndLoadController() {
-        String value = PropertiesConfig.getProperty("CompantScanBasePackages", "");
+        String value = PropertiesContext.getProperty("CompantScanBasePackages", "");
         String[] basePackages = value.split(",");
         List<Class<?>> controllers = null;
         try {

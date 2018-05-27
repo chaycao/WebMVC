@@ -1,6 +1,6 @@
 package com.chaycao.webmvc.view;
 
-import com.chaycao.webmvc.config.PropertiesConfig;
+import com.chaycao.webmvc.context.PropertiesContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +26,7 @@ public class JspViewResolver implements ViewResolver {
     private View resolveViewName(String viewName) {
         if (null == viewName)
             return new JspView();
-        String path = PropertiesConfig.getProperty("viewPrefix", "/") + viewName + PropertiesConfig.getProperty("viewSuffix", "");
+        String path = PropertiesContext.getProperty("viewPrefix", "/") + viewName + PropertiesContext.getProperty("viewSuffix", "");
         return new JspView(path);
     }
 
