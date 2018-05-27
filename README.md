@@ -21,6 +21,9 @@
 3. 视图
 - JSP
 
+4. 添加额外Servlet、Filter   
+实现WebApplicationInitializer接口，通过代码动态添加
+
 
 ## 正在开发功能：
 - 支持以JSON为媒体的RESTFul风格请求及返回视图
