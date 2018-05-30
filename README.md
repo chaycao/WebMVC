@@ -14,6 +14,7 @@
     - GET
     - POST
         - x-www-form-urlencoded
+        - form-data
 - 支持参数
     - 八种基本类型
     - String
