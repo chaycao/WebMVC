@@ -17,6 +17,7 @@
 - 支持参数
     - 八种基本类型
     - String
+    - 文件 @RequestPart
     
 3. 视图
 - JSP
