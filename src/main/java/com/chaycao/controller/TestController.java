@@ -3,7 +3,11 @@ package com.chaycao.controller;
 import com.chaycao.webmvc.annotation.Controller;
 import com.chaycao.webmvc.annotation.RequestMapping;
 import com.chaycao.webmvc.annotation.RequestParam;
+import com.chaycao.webmvc.annotation.RequestPart;
+import com.chaycao.webmvc.multipart.MultipartFile;
 import com.chaycao.webmvc.view.ModelAndView;
+
+import java.io.*;
 
 /**
  * Title:
@@ -35,5 +39,22 @@ public class TestController {
         modelAndView.addObject("name", "chaycao");
         modelAndView.setView("model");
         return modelAndView;
+    }
+    @RequestMapping("/file")
+    public void fileTest(@RequestPart MultipartFile file) {
+        System.out.println(file.getName());
+        try {
+            byte [] buffer=new byte[400];
+            int length = 0;
+            InputStream input = file.getInputStream();
+            InputStreamReader isr = new InputStreamReader(input, "UTF-8");
+            BufferedReader br = new BufferedReader(isr);
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
