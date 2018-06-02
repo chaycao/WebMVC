@@ -4,9 +4,12 @@
 ## 目前支持功能：
 ### 1. 路由 
 - @Controller  
-标注处理器
-- @RequestMapping  
-标注路由方法    
+标注处理器  
+- @RequestMapping(value, method, produces, consumes):  
+    - value：路由
+    - method：请求方法
+    - produces：request中的Accept
+    - consumes：request中的Content-Type
 
 ### 2. 路由方法传参 
 使用@RequestParam注解，为路由方法传参
@@ -14,7 +17,12 @@
     - GET
     - POST
         - x-www-form-urlencoded
-        - form-data
+        - form-data，文件上传
+    - PUT
+    - DELETE
+    - OPTIONS
+    - TRACES
+    - HEAD
 - 支持参数
     - 八种基本类型
     - String
@@ -24,9 +32,9 @@
 - JSP
 
 ### 4. 添加额外Servlet、Filter   
-实现WebApplicationInitializer接口，通过代码动态添加
+实现```WebApplicationInitializer```接口，通过代码动态添加
 
 
 ## 正在开发功能：
-- 支持以JSON为媒体的RESTFul风格请求及返回视图
-- 支持参数List
+- 支持传参JSON、返回JSON
+- RequestMapping路由,特殊符号处理，{id}
