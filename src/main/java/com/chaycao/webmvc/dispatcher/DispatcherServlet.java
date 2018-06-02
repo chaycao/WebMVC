@@ -48,6 +48,51 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            doService(request,response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            doService(request,response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void doHead(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            doService(request,response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            doService(request,response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void doTrace(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            doService(req,resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     protected void doService(HttpServletRequest request, HttpServletResponse response) throws Exception {
         doDispatch(request, response);
     }
@@ -57,6 +102,7 @@ public class DispatcherServlet extends HttpServlet {
         Route route = routeManager.findRouteByRequest(request);
         if (route == null) { // 未找到路由
             logger.info("Can not find Rout : " + request.getRequestURL());
+            // TODO 未正确返回404，需要修改
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
             ModelAndView mv = handler.handle(request, response, route);
