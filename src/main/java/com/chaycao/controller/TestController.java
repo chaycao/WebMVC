@@ -9,6 +9,8 @@ import com.chaycao.webmvc.view.ModelAndView;
 
 import java.io.*;
 
+import static com.chaycao.webmvc.annotation.RequestMethod.*;
+
 /**
  * Title:
  *
@@ -57,4 +59,35 @@ public class TestController {
             e.printStackTrace();
         }
     }
+
+    @RequestMapping(value = "/getPost", method = {GET, POST})
+    public void getPostTest() {
+        System.out.println("getPost OK");
+    }
+
+    @RequestMapping(value = "/putDelete", method = {PUT, DELETE})
+    public void putDeleteTest() {
+        System.out.println("putDelete OK");
+    }
+
+    @RequestMapping(value = "/produces", produces = "application/json")
+    public void producesJsonTest() {
+        System.out.println("produces application/json OK");
+    }
+
+    @RequestMapping(value = "/produces", produces = "text/html")
+    public void producesHtmlTest() {
+        System.out.println("produces text/html OK");
+    }
+
+    @RequestMapping(value = "/consume", consumes = "application/json")
+    public void consumeJsonTest() {
+        System.out.println("consume application/json OK");
+    }
+
+    @RequestMapping(value = "/consume", consumes = "text/html")
+    public void consumeHtmlTest() {
+        System.out.println("consume text/html OK");
+    }
+
 }
