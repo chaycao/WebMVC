@@ -31,8 +31,6 @@ public class JspView implements View {
         if (path != null) {
             model.forEach((k, v) -> request.setAttribute(k, v));
             request.getRequestDispatcher(path).forward(request, response);
-        } else {
-            throw new WebMvcException("JspView can not render, because path is null");
         }
     }
 

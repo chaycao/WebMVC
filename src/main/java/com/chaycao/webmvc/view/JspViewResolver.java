@@ -29,14 +29,16 @@ public class JspViewResolver implements ViewResolver {
         } else if (view instanceof JsonView) {
             return (View) view;
         }
-        throw new WebMvcException("Can not resovle view " + mv);
+        return new JspView();
     }
 
     private View resolveViewName(String viewName) {
-        if (null == viewName)
-            return new JspView();
-        String path = PropertiesContext.getProperty("viewPrefix", "/") + viewName + PropertiesContext.getProperty("viewSuffix", "");
-        return new JspView(path);
+        if (viewName.startsWith("Redirect:")) {
+            return new RedirectView(viewName.substring(10));
+        } else {
+            String path = PropertiesContext.getProperty("viewPrefix", "/") + viewName + PropertiesContext.getProperty("viewSuffix", "");
+            return new JspView(path);
+        }
     }
 
 }
