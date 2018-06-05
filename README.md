@@ -28,13 +28,16 @@
     - String
     - 文件 @RequestPart
     - REST风格的URL参数,如/path/{a}/{b}
+    - JSON
     
 ### 3. 视图
 - JSP
+- JSON
+- 重定向 "Redirect:{path}"
 
 ### 4. 添加额外Servlet、Filter   
 实现```WebApplicationInitializer```接口，通过代码动态添加
 
 
 ## 正在开发功能：
-- 支持传参JSON、返回JSON
+
