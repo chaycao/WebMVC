@@ -28,10 +28,15 @@ public class TestController {
     public void voidTest(){
         System.out.println("OK:void");
     }
-    @RequestMapping("/par")
+    @RequestMapping("/par/")
     public void parTest(@RequestParam int a, @RequestParam String b) {
         System.out.println("OK:par " + a + b);
     }
+    @RequestMapping("/parRest/{a}/{b}")
+    public void parRestTest(@RequestParam int a, @RequestParam String b) {
+        System.out.println("OK:parRest " + a + b);
+    }
+
     @RequestMapping("/view")
     public String view() {
         return "WEB-INF/index";
