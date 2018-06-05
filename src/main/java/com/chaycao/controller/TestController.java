@@ -41,6 +41,16 @@ public class TestController {
         return user;
     }
 
+    @RequestMapping("/redirect")
+    public String redirectFirstTest() {
+        return "Redirect:/redirectSecond";
+    }
+
+    @RequestMapping("/redirectSecond")
+    public void redirectSecondTest() {
+        System.out.println("OK:Redirect");
+    }
+
     @RequestMapping("/view")
     public String view() {
         return "WEB-INF/index";
