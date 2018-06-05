@@ -19,6 +19,10 @@ public class ModelAndView {
         this.view = viewName;
     }
 
+    public ModelAndView(View view) {
+        this.view = view;
+    }
+
     public ModelAndView(String viewName, Map<String, ?> model) {
         this.view = viewName;
         if (model != null)
@@ -55,5 +59,10 @@ public class ModelAndView {
     public ModelAndView addObject(Object attributeName, Object attributeValue) {
         this.getModel().put(attributeName, attributeValue);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return view.toString();
     }
 }
