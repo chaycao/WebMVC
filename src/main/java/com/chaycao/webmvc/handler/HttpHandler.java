@@ -33,7 +33,7 @@ public class HttpHandler implements Handler {
 
         Object[] args = argumentResolver.resolveArgument(request, response, route);
         Object result = invoke(route, args);
-        ModelAndView mv = returnValueResolver.resolveReturnValue(result);
+        ModelAndView mv = returnValueResolver.resolveReturnValue(result, route);
         return mv;
     }
 

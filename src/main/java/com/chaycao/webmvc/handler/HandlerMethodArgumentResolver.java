@@ -1,5 +1,7 @@
 package com.chaycao.webmvc.handler;
 
+import com.alibaba.fastjson.JSON;
+import com.chaycao.webmvc.annotation.RequestBody;
 import com.chaycao.webmvc.annotation.RequestParam;
 import com.chaycao.webmvc.annotation.RequestPart;
 import com.chaycao.webmvc.context.PropertiesContext;
@@ -18,7 +20,10 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -66,9 +71,29 @@ public class HandlerMethodArgumentResolver {
             } else if (p.getAnnotation(RequestPart.class) != null) {
                 MultipartFile file = multipartResolver.getMultipart(p.getName());
                 args[i++] = file;
+            } else if (p.getAnnotation(RequestBody.class) != null) {
+                String json = getJson(request);
+                args[i++] = JSON.parseObject(json, p.getType());
             }
         }
         return args;
+    }
+
+    private String getJson(HttpServletRequest request) {
+        try {
+            BufferedReader reader = request.getReader();
+            char[] buffer = new char[1024];
+            int index = 0;
+            StringBuilder json = new StringBuilder();
+            while ((index = reader.read(buffer, 0, 1024)) >= 0) {
+                json.append(buffer, 0, index);
+            }
+            reader.close();
+            return json.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private Map<String, String> getUrlParm(HttpServletRequest request, Route route) {

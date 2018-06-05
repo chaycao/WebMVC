@@ -1,6 +1,7 @@
 package com.chaycao.webmvc.view;
 
 import com.chaycao.webmvc.context.PropertiesContext;
+import com.chaycao.webmvc.expection.WebMvcException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,15 @@ public class JspViewResolver implements ViewResolver {
     public JspViewResolver() {}
 
     public View resovleModelAndView(ModelAndView mv) {
-        return resolveViewName(mv.getViewName());
+        Object view = mv.getView();
+        if (view instanceof String) {
+            return resolveViewName(mv.getViewName());
+        } else if (view instanceof JspView) {
+            return (View) view;
+        } else if (view instanceof JsonView) {
+            return (View) view;
+        }
+        throw new WebMvcException("Can not resovle view " + mv);
     }
 
     private View resolveViewName(String viewName) {
