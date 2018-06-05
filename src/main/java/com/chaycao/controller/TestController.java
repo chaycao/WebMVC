@@ -1,9 +1,6 @@
 package com.chaycao.controller;
 
-import com.chaycao.webmvc.annotation.Controller;
-import com.chaycao.webmvc.annotation.RequestMapping;
-import com.chaycao.webmvc.annotation.RequestParam;
-import com.chaycao.webmvc.annotation.RequestPart;
+import com.chaycao.webmvc.annotation.*;
 import com.chaycao.webmvc.multipart.MultipartFile;
 import com.chaycao.webmvc.view.ModelAndView;
 
@@ -35,6 +32,13 @@ public class TestController {
     @RequestMapping("/parRest/{a}/{b}")
     public void parRestTest(@RequestParam int a, @RequestParam String b) {
         System.out.println("OK:parRest " + a + b);
+    }
+    @RequestMapping("/jsonParTest")
+    @RequestBody
+    public User jsonParTest(@RequestBody User user) {
+        System.out.println(user.getName());
+        System.out.println(user.getPassword());
+        return user;
     }
 
     @RequestMapping("/view")
