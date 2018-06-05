@@ -27,6 +27,7 @@
     - 八种基本类型
     - String
     - 文件 @RequestPart
+    - REST风格的URL参数,如/path/{a}/{b}
     
 ### 3. 视图
 - JSP
@@ -37,4 +38,3 @@
 
 ## 正在开发功能：
 - 支持传参JSON、返回JSON
-- RequestMapping路由,特殊符号处理，{id}
