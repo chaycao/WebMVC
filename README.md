@@ -16,8 +16,9 @@
 - 支持请求方式：
     - GET
     - POST
-        - x-www-form-urlencoded
+        - x-www-form-urlencoded, 表单数据
         - form-data，文件上传
+        - raw, JSON
     - PUT
     - DELETE
     - OPTIONS
