@@ -1,5 +1,7 @@
 package com.chaycao.webmvc.view;
 
+import com.chaycao.webmvc.expection.WebMvcException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -29,6 +31,16 @@ public class JspView implements View {
         if (path != null) {
             model.forEach((k, v) -> request.setAttribute(k, v));
             request.getRequestDispatcher(path).forward(request, response);
+        } else {
+            throw new WebMvcException("JspView can not render, because path is null");
         }
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
