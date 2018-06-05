@@ -59,31 +59,13 @@ public class RouteManager {
      * @return 符合的Rounte对象，找不到返回null
      */
     public Route findRouteByRequest(HttpServletRequest request) {
-        List<Route> routes = findRoutesByPath(this.getRoutes(), request);
-        for (Route route : routes) {
+        for (Route route : this.getRoutes()) {
             if (route.canSupportRequest(request))
                 return route;
         }
         return null;
     }
 
-    /**
-     *
-     *
-     * @param list
-     * @param request
-     * @return 符合的Route对象，若没找到返回null
-     */
-    public List<Route> findRoutesByPath(List<Route> list, HttpServletRequest request) {
-        String path = PathUtil.getRelativePath(request);
-        List<Route> res = new ArrayList<>();
-        for (Route route : list) {
-            if (route.getPath().equals(path)) {
-                res.add(route);
-            }
-        }
-        return res;
-    }
 
     /**
      *

@@ -6,9 +6,9 @@ import com.chaycao.webmvc.util.HttpUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Title:
@@ -48,6 +48,16 @@ public class Route {
      */
     private String[] consumes;
 
+    /**
+     * 用于正则匹配的格式，将path中的{}替换成 ([^\\/]*)，匹配参数用
+     */
+    private Pattern urlPattern;
+
+    /**
+     * 参数名
+     */
+    private String[] parmNames;
+
     public Route(String path, Method action, RequestMethod[] requestMethods, String[] produces, String[] consumes) {
         this.path = path;
         this.action = action;
@@ -61,6 +71,8 @@ public class Route {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        this.urlPattern = buildUrlPattern(path);
+        this.parmNames = buildParmNames(path);
     }
 
     public boolean canSupportRequest(HttpServletRequest request) {
@@ -75,7 +87,8 @@ public class Route {
 
     private boolean canSupportRequestPath(HttpServletRequest request) {
         String path = PathUtil.getRelativePath(request);
-        if (this.getPath().equals(path))
+        Matcher urlMatcher = this.urlPattern.matcher(path);
+        if (urlMatcher.matches())
             return true;
         return false;
     }
@@ -147,6 +160,25 @@ public class Route {
         return false;
     }
 
+    // 将path中的{}替换成 ([^\\/]*)，匹配参数用
+    private Pattern buildUrlPattern(String path) {
+        path = path.replaceAll("//","\\//");
+        path = path.replaceAll("\\{.*?\\}", "([^\\/]*)");
+        return Pattern.compile(path);
+    }
+
+    private String[] buildParmNames(String path) {
+        String parmPatternString = "(?<=\\{).*?(?=\\})";
+        Pattern parmPattern = Pattern.compile(parmPatternString);
+        Matcher parmMatcher = parmPattern.matcher(path);
+        List<String> parmList = new ArrayList<>();
+        while (parmMatcher.find()) {
+            parmList.add(parmMatcher.group());
+        }
+        String[] parmNames = new String[parmList.size()];
+        return parmList.toArray(parmNames);
+    }
+
     public String getPath() {
         return path;
     }
@@ -193,5 +225,21 @@ public class Route {
 
     public void setConsumes(String[] consumes) {
         this.consumes = consumes;
+    }
+
+    public Pattern getUrlPattern() {
+        return urlPattern;
+    }
+
+    public void setUrlPattern(Pattern urlPattern) {
+        this.urlPattern = urlPattern;
+    }
+
+    public String[] getParmNames() {
+        return parmNames;
+    }
+
+    public void setParmNames(String[] parmNames) {
+        this.parmNames = parmNames;
     }
 }

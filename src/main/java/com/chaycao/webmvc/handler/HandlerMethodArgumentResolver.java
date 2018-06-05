@@ -5,6 +5,7 @@ import com.chaycao.webmvc.annotation.RequestPart;
 import com.chaycao.webmvc.context.PropertiesContext;
 import com.chaycao.webmvc.multipart.MultipartFile;
 import com.chaycao.webmvc.route.Route;
+import com.chaycao.webmvc.util.PathUtil;
 import com.chaycao.webmvc.util.TypeUtil;
 import com.chaycao.webmvc.view.ModelAndView;
 import org.apache.commons.fileupload.FileItem;
@@ -20,7 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author chaycao
@@ -42,6 +47,8 @@ public class HandlerMethodArgumentResolver {
         if (multipartResolver.checkMultipart(request))
             multipartResolver.resolveRequest(request);
 
+        Map<String, String> urlParm = getUrlParm(request, route);
+
         int i = 0;
         for (Parameter p : parameters) {
             Class<?> type = p.getType();
@@ -50,7 +57,10 @@ public class HandlerMethodArgumentResolver {
             } else if (type == HttpServletResponse.class) {
                 args[i++] = response;
             } else if (p.getAnnotation(RequestParam.class) != null) {
-                args[i++] = TypeUtil.cast(request.getParameter(p.getName()), p.getType());
+                if (urlParm.get(p.getName())!= null)
+                    args[i++] = TypeUtil.cast(urlParm.get(p.getName()), p.getType());
+                else
+                    args[i++] = TypeUtil.cast(request.getParameter(p.getName()), p.getType());
             } else if (type == ModelAndView.class) {
                 args[i++] = new ModelAndView();
             } else if (p.getAnnotation(RequestPart.class) != null) {
@@ -59,5 +69,19 @@ public class HandlerMethodArgumentResolver {
             }
         }
         return args;
+    }
+
+    private Map<String, String> getUrlParm(HttpServletRequest request, Route route) {
+        String path = PathUtil.getRelativePath(request);
+        Pattern urlPattern = route.getUrlPattern();
+        String[] parmNames = route.getParmNames();
+        Matcher matcher = urlPattern.matcher(path);
+        Map<String, String> map = new HashMap<>(parmNames.length);
+        if (matcher.matches()) {
+            for (int i = 0; i < parmNames.length; i++) {
+                map.put(parmNames[i], matcher.group(i+1));
+            }
+        }
+        return map;
     }
 }
